@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.vm-theme {
+  --fa-secondary-opacity: 1.0;
+  --fa-primary-color: orange;
+  --fa-secondary-color: rgb(108, 108, 108);
+}
+
+.kitchen-titles {
+  @apply bg-gray-900 p-4 rounded-lg font-bold text-white;
+}
+
+
+
+.smooth {
+    @apply transform duration-300;
+}
+
+.search {
+  @apply w-full py-2 px-4 bg-gray-100/10 rounded-full text-gray-200;
+}
+
+.search-result {
+  @apply bg-gray-50 py-2 px-2 shadow-lg flex gap-2 hover:bg-gray-200 border-b-2 border-b-gray-200 cursor-pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+option:hover {
+  @apply bg-purple-500;
+}
+
+.reg-label{
+  @apply inline-block text-gray-800 text-lg;
+}
+
+.error-text {
+  @apply text-rose-400 text-xs mt-1;
+}
+
+label{
+  @apply text-white;
+}
+
+input{
+  @apply outline-none;
+}
+
+.user-td {
+  @apply px-6 py-4;
+}
+
+.tabledata {
+  @apply py-3 px-6 text-left;
+}
+
+.btn-primary {
+  @apply border border-current py-2 px-4 rounded-lg  hover:bg-amber-500 hover:text-gray-200 hover:border-amber-500 smooth text-xl;
+}
+
+.btn-secondary {
+  @apply border border-current py-2 px-4 rounded-lg smooth lg:text-xl text-xs;
+}
+/* ----
+    Animations
+  ---- */
+
+  .fadeInRight {
+    animation: fadeInRight 1s;
+  }
+  @keyframes fadeInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .fadeInLeft {
+    animation: fadeInLeft 1s;
+  }
+  @keyframes fadeInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .fadeInTop {
+    animation: fadeInTop 1s;
+  }
+
+  @keyframes fadeInTop {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fadeInBottom {
+    animation: fadeInBottom 1s;
+  }
+  @keyframes fadeInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fadeIn {
+    animation: fadeIn 1s ease-in-out;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .fadeOut {
+    animation: fadeOut 1s 3s ease-in-out;
+  }
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+/* ----
+    Animations - end
+  ---- */

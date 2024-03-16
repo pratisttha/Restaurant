@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Http\Request;
+
+class OrderItemsController extends Controller
+{
+    
+    public function store(Request $request,Order $id)
+    {
+        $formFields = $request->validate([
+            'item' => 'required',
+            'qty' => 'required',
+        ]);
+        // Add items to database
+        $formFields['order_id'] = $request['order_no'];
+        $formFields['item_id'] = $request['item'];
+        $formFields['status'] = $request['status'];
+        $formFields['type'] = $request['type'];
+        $formFields['qty'] = $request['qty'];
+        if($id->payment == "Paid"){
+            $id->update(['payment' => null]);
+        }
+        
+        OrderItem::create($formFields);
+        return redirect('/orders/'.$id->id.'/additems')->with('success', 'Item added successfully.');
+    }
+
+   
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $order_no)
+    {
+        $orderItem = OrderItem::find($order_no);
+        $id = $orderItem['order_id'];
+        $formFields = $request->validate([
+            'qty' => 'required'
+        ]);
+        //
+        $orderItem->update($formFields);
+        return redirect('/orders/'.$id.'/additems')->with('success', 'Item updated successfully.');
+    }
+
+   
+    // Upadte itmes
+    public function update_item(Request $request, OrderItem $id){
+        $formFields['status'] = $request['status'];
+        $id->update($formFields);
+        return redirect('/kitchen')->with('success', 'Item updated successfully.');
+    }
+
+    // Delete Items
+    public function delete_item(Order $order, OrderItem $item){
+        $item->delete();
+
+        return redirect('/orders/'.$order->id.'/additems')->with('success', 'Item deleted successfully!');
+    }
+
+    // Cooking Item
+    public function update_item_cooking(OrderItem $id) {
+        $formFields['status'] = 'cooking';
+
+        $id->update($formFields);
+
+        return redirect('/kitchen')->with('success', 'Item updated successfully.');
+    }
+    // Preparing Item
+    public function update_item_preparing(OrderItem $id) {
+        $formFields['status'] = 'cooking';
+
+        $id->update($formFields);
+
+        return redirect('/bar')->with('success', 'Item updated successfully.');
+    }
+
+    // Cooked Item
+    public function update_item_cooked(OrderItem $id) {
+        $formFields['status'] = 'done';
+
+        $id->update($formFields);
+
+        return redirect('/kitchen')->with('success', 'Item updated successfully.');
+    }
+
+    // Prepared Item
+    public function update_item_prepared(OrderItem $id) {
+        $formFields['status'] = 'done';
+
+        $id->update($formFields);
+
+        return redirect('/bar')->with('success', 'Item updated successfully.');
+    }
+}
