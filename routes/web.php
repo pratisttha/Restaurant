@@ -7,6 +7,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -73,7 +74,19 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('/orders/add','show');
     Route::post('/orders/store','store');
     Route::get('/orders/{order}/additems','additems');
- 
+    Route::get('/orders/{order}/transfer','transferView');
+    Route::get('/orders/{order}/merge','mergeView');
+    Route::post('/orders/{order}/transfer/update','transfer');
+    Route::post('/orders/{order}/merge/update','merge');
+    Route::get('/orders/{id}/paid', 'paid');
+    Route::delete('/orders/{id}/delete', 'destroy');
+    Route::get('/orders/{id}/complete/{amount}', 'complete');
+    Route::put('/orderitems/{id}/update', 'update_item');
+    Route::get('/orderitems/{id}/update/cooking', 'update_item_cooking');
+    Route::get('/orderitems/{id}/update/preparing', 'update_item_preparing');
+    Route::get('/orderitems/{id}/update/cooked', 'update_item_cooked');
+    Route::get('/orderitems/{id}/update/prepared', 'update_item_prepared');
+    Route::delete('/orderitems/{order}/{item}/delete', 'delete_item');
 });
 
 //Order Bill
@@ -82,3 +95,5 @@ Route::controller(InvoiceController::class)->group(function(){
     Route::get('/invoices/{order}','show');
 });
 
+// transactions
+Route::get('/reports', [ReportController::class, 'index']);

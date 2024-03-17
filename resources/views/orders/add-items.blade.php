@@ -1,5 +1,5 @@
 <x-layout class="pb-20">
-    <form action="additems" method="POST" class="mb-6" id="orderItems">
+    <form action="additems" method="post" class="mb-6" id="orderItems">
         @csrf
         <label for="item" class="text-white">
             Choose items:
@@ -200,7 +200,7 @@
                 @endif
             </tbody>
         </table>
-        @if (isset($amounts))
+        @if(isset($amounts))
             <div class="flex justify-between items-center w-full mt-4">
                 <div>
                 </div>
@@ -212,5 +212,6 @@
             </div>
         @endif
     </x-card>
+</x-layout>
 
   
