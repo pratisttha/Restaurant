@@ -1,6 +1,5 @@
 <x-layout>
     @include('partials.search')
-   
     <div class="w-full flex flex-col gap-4 justify-center">
         <div class="justify-between flex w-full text-xl font-bold text-gray-300 items-center">
             <p>Orders</p>

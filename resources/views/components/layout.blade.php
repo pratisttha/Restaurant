@@ -25,7 +25,7 @@
         @isset($title)
             {{ $title }} | TARA
         @else
-            TARA
+            TARA 
         @endisset
     </title>
     <script type="text/javascript">
