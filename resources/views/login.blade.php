@@ -24,7 +24,7 @@
             <input type="text" class="border border-gray-200 rounded p-2 w-full" name="phone"
             value="{{ old('phone') }}" autofocus placeholder="985624852" />
             @error('phone')
-            <p class="text-white text-xs mt-1">{{ $message }}</p>
+            <p class="text-rose-400 text-xs">{{ $message }}</p>
             @enderror
         </div>
 
@@ -35,8 +35,9 @@
             <input type="password" class="border border-gray-200 rounded p-2 w-full" name="password"
                 value="{{ old('password') }}" />
             @error('password')
-                <p class="text-white text-xs mt-1">{{ $message }}</p>
+                <p class="text-rose-400 text-xs">{{ $message }}</p>
             @enderror
+            <i class="fa-solid fa-edit hover:text-amber-600 hover:font-bold smooth"></i>
         </div>
 
         <div class="mb-6">
@@ -45,7 +46,19 @@
                 Sign In
             </button>
         </div>
-        <a href="/users/register" class="btn-primary"> Create user </a>
+        <script>
+            // JavaScript to toggle password visibility
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#password');
+    
+            togglePassword.addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                // toggle the eye / eye slash icon
+                this.classList.toggle('fa-eye-slash');
+            });
+        </script>
         
     </form>
     </div>

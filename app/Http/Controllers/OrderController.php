@@ -63,7 +63,7 @@ class OrderController extends Controller
         } else {
             $tables = Tables::all();
             $customers = Customer::all();
-            return view('orders.add-items', compact('order', 'tables'));
+            return view('orders.add-items', compact('order', 'tables', 'customers'));
         };
     }
 

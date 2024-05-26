@@ -92,10 +92,9 @@ class UserController extends Controller
 
             return redirect('/users')->with('success', 'You are now logged in!');
         }
+        return redirect('/')->with('success', 'Credentials dont match');
 
-        /*  return back()->withErrors(['username' => 'Invalid Username'])->onlyInput('username'); */
 
-        return back('/users')->with('error', 'Credentials does not match in our database.');
     }
 
     /**
@@ -136,8 +135,11 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+     // Delete User
+     public function destroy(user $user)
+     {
+         $user->delete();
+ 
+         return redirect('/users')->with('success', 'User deleted successfully!');
+     }
     }
-}

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Visit;
 use App\Models\Tables;
 use App\Models\Customer;
 use Illuminate\Http\Request;

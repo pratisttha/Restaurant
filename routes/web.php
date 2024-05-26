@@ -6,6 +6,7 @@ use App\Http\Controllers\KitchenController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemsController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Http\Request;
@@ -81,13 +82,30 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('/orders/{id}/paid', 'paid');
     Route::delete('/orders/{id}/delete', 'destroy');
     Route::get('/orders/{id}/complete/{amount}', 'complete');
-    Route::put('/orderitems/{id}/update', 'update_item');
-    Route::get('/orderitems/{id}/update/cooking', 'update_item_cooking');
-    Route::get('/orderitems/{id}/update/preparing', 'update_item_preparing');
-    Route::get('/orderitems/{id}/update/cooked', 'update_item_cooked');
-    Route::get('/orderitems/{id}/update/prepared', 'update_item_prepared');
-    Route::delete('/orderitems/{order}/{item}/delete', 'delete_item');
 });
+
+
+// Order List Resource
+Route::resource('/orders/{id}/additems', OrderItemsController::class);
+
+// update order list item
+Route::put('/orderitems/{id}/update', [OrderItemsController::class, 'update_item']);
+
+// update order list item
+Route::get('/orderitems/{id}/update/cooking', [OrderItemsController::class, 'update_item_cooking']);
+
+// update order list item
+Route::get('/orderitems/{id}/update/preparing', [OrderItemsController::class, 'update_item_preparing']);
+
+// update order list item
+Route::get('/orderitems/{id}/update/cooked', [OrderItemsController::class, 'update_item_cooked']);
+
+// update order list item
+Route::get('/orderitems/{id}/update/prepared', [OrderItemsController::class, 'update_item_prepared']);
+
+// Delete order list item
+Route::delete('/orderitems/{order}/{item}/delete', [OrderItemsController::class, 'delete_item']);
+
 
 //Order Bill
 Route::controller(InvoiceController::class)->group(function(){
