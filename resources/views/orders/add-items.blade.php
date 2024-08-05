@@ -1,16 +1,18 @@
+
 <x-layout class="pb-20">
-    <form action="/orders/{{ $order->id }}/additems" method="POST" class="mb-6" id="orderItems">
+    
+    <form action="additems" method="POST" class="mb-6" id="orderItems">
         @csrf
         <label for="item" class="text-white">
             Choose items:
         </label>
         {{-- Search Bar --}}
-        <input type="search" name="search" class="border border-gray-200 rounded p-2 w-full my-2"
+        <input type="text" name="item_name" class="border border-gray-200 rounded p-2 w-full my-2"
             placeholder="Search Items..." id="search">
         {{-- end search bar --}}
         <ul class="grid grid-cols-1 md:grid-cols-4 gap-2 my-2 list-none hidden" id="content">
         </ul>
-        @error('item')
+        @error('item_name')
             <p class="text-rose-400 text-xs ">
                 {{ $message }}
             </p>
@@ -29,7 +31,6 @@
                 {{ $message }}
             </p>
         @enderror
-        <input type="hidden" name="item_id" id="item_id">
         <input type="number" name="order_no" id="order_no" value="{{ $order->id }}" hidden>
         <input type="text" name="status" id="status" value="pending" hidden>
     </form>
@@ -217,67 +218,29 @@
             </div>
         @endif
     </x-card>
-
+            
     {{-- Ajax Starting --}}
     <script class="text/javascript">
         $('#search').on('keyup', function() {
-            $value = $(this).val();
-            if ($value) {
-                $('#content').removeClass('hidden');
-                $('#content').show().removeClass('hidden');
+            let value = $(this).val();
+            if (value) {
+                $('#content').removeClass('hidden').show();
             } else {
-                $('#content').addClass('hidden');
-                $('#content').hide().addClass('hidden');
-            };
+                $('#content').addClass('hidden').hide();
+            }
             $.ajax({
                 type: 'get',
-                url: '{{ URL::to('/search/item') }}',
-                data: {
-                    'search': $value
-                },
-
+                url: '{{ URL::to("/search/item") }}',
+                data: { 'search': value },
                 success: function(data) {
                     $('#content').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error: ", xhr.responseText);
                 }
             });
-        })
+        });
     </script>
-    <script>
-        $(document).ready(function() {
-            @if (isset($order->discount))
-                $('#discountAmt').show();
-            @else
-                $('#discountAmt').hide();
-            @endif
-        })
-        $('#discount_type').on('change', function() {
-            const subtotal = {{ isset($subtotal) ? $subtotal : '' }};
-
-            if ($('#discount_type').val() === 'bulk') {
-                $("#discountAmt").show();
-            }
-            if ($('#discount_type').val() === '10%') {
-                var discount = subtotal * 0.1;
-                var discountAmt = (subtotal - discount);
-                var gtotal = discountAmt + (0.13 * discountAmt);
-                $("#discountAmt").show();
-                $("#discount").val(discount);
-            }
-            if ($('#discount_type').val() === '15%') {
-                var discount = subtotal * 0.15;
-                var discountAmt = (subtotal - discount);
-                var gtotal = discountAmt + (0.13 * discountAmt);
-                $("#discountAmt").show();
-                $("#discount").val(discount);
-            }
-            if ($('#discount_type').val() === '20%') {
-                var discount = subtotal * 0.2;
-                var discountAmt = (subtotal - discount);
-                var gtotal = discountAmt + (0.13 * discountAmt);
-                $("#discountAmt").show();
-                $("#discount").val(discount);
-            }
-        })
-    </script>
-        
+    
+   
 </x-layout>

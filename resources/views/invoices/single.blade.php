@@ -230,69 +230,7 @@
                 </script>
             </tbody>
         </table>
-        @if (isset($amounts))
-            <div class="flex items-center w-full mt-4">
-                @if ($order->customer == null)
-                    <form action="" method="get" id="search" class="no-print">
-                        <input type="search" name="search" id="customer_search" placeholder="Search customer"
-                            class="p-2 rounded-l-lg bg-gray-600/10 text-gray-800 border broder border-current outline-none">
-                    </form>
-                    <form action="/invoices/{{ $order->id }}/customer/update" method="POST" id="customer"
-                        class="flex items-center gap-2 no-print mr-2">
-                        @csrf
-                        <select name="customer"
-                            class="p-2 rounded-r-lg bg-gray-600/10 text-gray-800 border broder border-current outline-none">
-                            <option value="" hidden>Please choose a customer.</option>
-                            @foreach ($customers as $customer)
-                                <option value="{{ $customer->id }}"
-                                    @if ((isset($_GET['search']) && $_GET['search'] == $customer->phone) ||
-                                        (isset($_GET['search']) && $_GET['search'] == $customer->id)) selected @endif>{{ $customer->name }}</option>
-                            @endforeach
-                        </select>
-                        <button type="submit" form="customer"
-                            class="!py-1 btn-primary !text-gray-800 hover:text-gray-100">Update</button>
-                        @if (isset($_GET['search']))
-                            @php
-                                $customer = App\Models\Customer::where('id', $_GET['search'])
-                                    ->orWhere('phone', $_GET['search'])
-                                    ->get();
-                            @endphp
-                            @if (count($customer) < 1)
-                                <p>No customer with such record!</p>
-                            @endif
-                        @endif
-                    </form>
-                @else
-                    <p class="w-full flex flex-wrap items-center gap-2">Customer:
-                        <span class="font-bold text-xl text-amber-600">
-                            @foreach ($customers as $customer)
-                                @if ($customer->id == $order->customer)
-                                    {{ $customer->name }}
-                                @endif
-                            @endforeach
-                        </span>
-                    </p>
-                @endif
-                @if (isset($order->customer))
-                    <div class="flex lg:justify-end justify-center mt-4 md:!mt-0 gap-4 w-full">
-                        @if ($order->payment != 'Paid')
-                            <a href="/orders/{{ $order->id }}/paid"
-                                class="btn-secondary hover:scale-105 !text-green-600">Paid</a>
-                        @endif
-                        @if ($order->customer != null)
-                            <a href="/orders/{{ $order->id }}/complete/{{ isset($totalAfterDiscount) ? number_format($totalAfterDiscount, 2) : number_format($subtotal, 2) }}"
-                                class="btn-secondary hover:scale-105" title="Complete Order">Complete</a>
-                        @endif
-                    </div>
-                @endif
-                <div class="flex-shrink-0 ml-2">
-                    @include('_partials/printBtn')
-                </div>
-            </div>
-            @error('customer')
-                <p class="text-xs text-rose-600">{{ $message }}</p>
-            @enderror
-        @endif
+        
     </x-card>
     <div class="">
         <div id="printContent" class="w-max text-xs flex flex-col items-center bg-white px-2 mx-auto">

@@ -66,7 +66,7 @@
     </div>
 </x-layout>
 <script>
-    // $(document).ready(function(){
-    //     setInterval(fetchdata, 10000);
-    // })
+     $(document).ready(function(){
+        setInterval(fetchdata, 10000);
+     })
 </script>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Items;
 
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -28,6 +29,8 @@ class OrderItemsController extends Controller
         // 
     }
 
+    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -42,10 +45,10 @@ class OrderItemsController extends Controller
         ]);
         // Add items to database
         $formFields['order_id'] = $request['order_no'];
-        $formFields['item_id'] = $request['id'];
+        $formFields['item_id'] = $request['item'];
         $formFields['status'] = $request['status'];
         $formFields['type'] = $request['type'];
-        $formFields['qty'] = $request['qty'];
+        $formFields['qty'] = $request->input('qty');
         if($id->payment == "Paid"){
             $id->update(['payment' => null]);
         }

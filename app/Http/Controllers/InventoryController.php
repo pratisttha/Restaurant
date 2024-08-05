@@ -148,35 +148,34 @@ class InventoryController extends Controller
     // Search Item
     public function search(Request $request)
     {
+   
         $categories = Categories::all();
-        $items = Items::where('name', 'Like', '%' . $request->search . '%')->orWhere('id', 'Like', '%' . $request->search . '%')->paginate(4, ['*'], 'items');
+        $items = Items::where('name', 'LIKE', '%' . $request->search . '%')
+            ->orWhere('id', 'LIKE', '%' . $request->search . '%')
+            ->get();
+
         $output = '';
-        $output .= '';
         foreach ($items as $item) {
+            $val = 0; // Default value if no category is matched
             foreach ($categories as $category) {
-                if ($item['category'] == $category['id']) {
-                    $type = $category['type'];
-                    if ($type == "Food") {
-                        $val = 1;
-                    } else {
-                        $val = 2;
-                    }
+                if ($item->category_id == $category->id) {
+                    $type = $category->type;
+                    $val = ($type == "Food") ? 1 : 2;
+                    break; // No need to continue once category is found
                 }
             }
-            $output .=
-                '
+            $output .= '
                 <li>
-                    <input type="radio" name="item" id="opt_' . $item['id'] . '" class="peer" hidden value="' . $item['id'] . '">
-                    <input type="number" name="type" id="type_' . $item['id'] . '" value="' . $val . '" hidden>
-                    <div class="rounded-lg flex p-4 justify-between items-center bg-gray-200 peer-checked:bg-amber-300" id="' . $item['id'] . '">
-                        
+                    <input type="radio" name="item" id="opt_' . $item->id . '" class="peer" hidden value="' . $item->id . '">
+                    <input type="number" name="type" id="type_' . $item->id . '" value="' . $val . '" hidden>
+                    <div class="rounded-lg flex p-4 justify-between items-center bg-gray-200 peer-checked:bg-amber-300" id="' . $item->id . '">
                         <div class="text-black font-bold flex gap-2 items-center flex-shrink">
                             <div class="bg-gray-300 shadow-lg rounded-lg w-16 h-16 flex justify-center items-center flex-shrink-0">
-                            #' . $item['id'] . '
+                            #' . $item->id . '
                             </div>
                             <p class="font-bold mr-1">
-                            ' . $item["name"] . '
-                            <br><span class="font-normal">Rs. ' . $item["price"] . '</span>
+                            ' . $item->name . '
+                            <br><span class="font-normal">Rs. ' . $item->price . '</span>
                             </p>
                         </div>
                         <p class="bg-amber-500 rounded-lg flex-shrink-0 flex justify-center items-center font-medium w-8 h-8">
@@ -185,17 +184,19 @@ class InventoryController extends Controller
                     </div>
                 </li>
                 <script>
-                $("#' . $item['id'] . '").click(function(){
-                    if($("#opt_' . $item['id'] . '").is(":checked")){
-                    }else{
-                        $("#opt_' . $item['id'] . '").prop("checked", true);
+                $("#' . $item->id . '").click(function(){
+                    if($("#opt_' . $item->id . '").is(":checked")){
+                    } else {
+                        $("#opt_' . $item->id . '").prop("checked", true);
                     }
                 });
                 </script>
-                ';
-        };
+            ';
+        }
         return response($output);
+    
     }
+    
 
     // Search Items
     public function searchItems(Request $request)

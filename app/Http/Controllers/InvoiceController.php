@@ -41,7 +41,6 @@ class InvoiceController extends Controller
             'customer' => 'required'
         ]);
         $formFields['customer_id'] = $request->customer;
-        Visit::create($formFields);
         $order->update(['customer' => $request->customer]);
         return redirect('/invoices/' . $order->id)->with('success', 'Customer assigned successfully.');
     }

@@ -11,7 +11,7 @@
     <div class="w-full flex gap-4 text-white items-center md:hidden justify-center my-3 px-6">
         @include('inc.availability')
     </div>
-    @include('partials.tables')
+    @include('_partials.tables')
 
     <div class="pb-20">
         {{ $tables->links('pagination::tailwind') }}

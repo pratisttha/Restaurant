@@ -37,6 +37,9 @@ class OrderController extends Controller
             'items' => Items::paginate(4)
         ]);
     }
+
+   
+
     // Store order
     public function store(Request $request, Tables $tab)
     {

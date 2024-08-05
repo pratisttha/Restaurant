@@ -1,7 +1,26 @@
 <x-layout :title="$title">
-    @include('partials.search')
-   
-    
+    @include('_partials.search')
+    <script>
+        $('#search').on('keyup', function() {
+            $value = $(this).val();
+            if ($value) {
+                $('#results').show();
+            } else {
+                $('#results').hide();
+            };
+            $.ajax({
+                type: 'get',
+                url: '{{ URL::to('/search/invoices') }}',
+                data: {
+                    'search': $value
+                },
+
+                success: function(data) {
+                    $('#results').html(data);
+                }
+            });
+        })
+    </script>
     <div class="w-full flex flex-col gap-4 justify-center">
         <div class="justify-between flex w-full text-xl font-bold text-gray-300 items-center">
             <p>Invoices</p>

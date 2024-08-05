@@ -17,6 +17,7 @@ class CreateOrderItemsTable extends Migration
             $table->id();
             $table->integer('order_id');
             $table->integer('item_id');
+            $table->integer('item_name');
             $table->integer('qty');
             $table->integer('type');
             $table->string('status');

@@ -1,16 +1,20 @@
 <?php
 
+use App\Events\MessageNotification;
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\KitchenController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\TableController;
+use App\Http\Controllers\KitchenController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemsController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReportController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\TableController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,75 +22,141 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
 Route::get('/', function () {
-    return view('login');
+    if (Auth::guest()) {
+        //is a Laravel guest so redirect
+        return redirect('login');
+       }
+    return view('main');
 });
 
-//User
-Route::controller(UserController::class)->group(function () {
-    Route::get('/users/register', 'create');
-    Route::get('/users', 'index');
-    Route::post('/users/store', 'store');
-    Route::get('/users/{user}/edit', 'edit');
-    Route::put('/users/{user}', 'update');
-    Route::delete('/users/{user}', 'destroy');
-    Route::get('/users/login', 'login');
-    Route::post('/logout', 'logout' );
-    Route::post('/users/authenticate', 'authenticate');
-});
+//Show register form
+Route::get('/users/register', [UserController::class, 'create']);
 
-//Inventory
-Route::controller(InventoryController::class)->group(function () {
-    Route::get('/inventory','index');
-    Route::post('/category/store','category_store');
-    Route::get('/inventory/category/add','categories');
-    Route::get('/inventory/categories/{category}/edit','category_edit');
-    Route::put('/category/{category}','category_update');
-    Route::post('/item/store','store');
-    Route::get('/inventory/items/{item}/edit','item_edit');
-    Route::delete('/items/{item}/delete','item_delete');
-    Route::put('/item/{item}','item_update');
-    Route::get('/inventory/item/add','item');
-});
+//Show Users Main page
+Route::get('/users', [UserController::class, 'index']);
 
+// Store user
+Route::post('/users/store', [UserController::class, 'store']);
+
+// Show edit user form
+Route::get('/users/{user}/edit', [UserController::class, 'edit']);
+
+//Update user
+Route::put('/users/{user}', [UserController::class, 'update']);
+
+//Delete user
+Route::delete('/users/{user}', [UserController::class, 'destroy']);
+
+//show login form
+Route::get('/login', [UserController::class, 'login']);
+
+//Log user out
+Route::post('/logout', [UserController::class, 'logout' ]);
+
+//log user in
+Route::post('/users/authenticate', [UserController::class, 'authenticate']);
+
+// Dashboard
+Route::get('/dashboard', [DashboardController::class, 'view']);
+
+
+//Inventory Management
+Route::get('/inventory', [InventoryController::class, 'index']);
+
+//Store catagory
+Route::post('/category/store', [InventoryController::class,'category_store']);
+
+//Category Management
+Route::get('/inventory/category/add', [InventoryController::class, 'categories']);
+
+//edit category
+Route::get('/inventory/categories/{category}/edit', [InventoryController::class, 'category_edit']);
+
+//update category
+Route::put('/category/{category}', [InventoryController::class, 'category_update']);
+
+//store item
+Route::post('/item/store', [InventoryController::class, 'store']);
+
+//edit item
+Route::get('/inventory/items/{item}/edit', [InventoryController::class, 'item_edit']);
+
+//delete item
+Route::delete('/items/{item}/delete', [InventoryController::class, 'item_delete']);
+
+//Update item
+Route::put('/item/{item}', [InventoryController::class, 'item_update']);
+
+//Item Management
+Route::get('/inventory/item/add', [InventoryController::class, 'item']);
+
+//Customers 
+Route::get('/customers', [CustomerController::class, 'view']);
+
+// Add customers - View Form
+Route::get('/customers/add', [CustomerController::class, 'add']);
+
+// Store Customer
+Route::post('/customers/store', [CustomerController::class, 'store']);
+
+// Edit Form Customer
+Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit']);
+
+// View Particular Customer
+Route::get('/customers/{customer}', [CustomerController::class, 'single']);
+
+// Update Customer
+Route::put('/customers/{customer}/update', [CustomerController::class, 'update']);
+
+// Delete customer
+Route::delete('/customers/{customer}/delete', [CustomerController::class, 'delete']);
 
 //Kitchen 
-Route::controller(KitchenController::class)->group(function () {
-    Route::get('/kitchen','index');
-});
+Route::get('/kitchen', [KitchenController::class, 'index']);
 
-//Tables
-Route::controller(TableController::class)->group(function () {
-    Route::get('/tables','view');
-    Route::get('/tables/add','show');
-    Route::post('/tables/store','store');
-    Route::get('/tables/{table}','reserve');
-    Route::post('/tables/{table}/reserve','reserve_update');
-});
 
-//orders 
-Route::controller(OrderController::class)->group(function () {
-    Route::get('/orders','view');
-    Route::get('/orders/add','show');
-    Route::post('/orders/store','store');
-    Route::get('/orders/{order}/additems','additems');
-    Route::get('/orders/{order}/transfer','transferView');
-    Route::get('/orders/{order}/merge','mergeView');
-    Route::post('/orders/{order}/transfer/update','transfer');
-    Route::post('/orders/{order}/merge/update','merge');
-    Route::get('/orders/{id}/paid', 'paid');
-    Route::delete('/orders/{id}/delete', 'destroy');
-    Route::get('/orders/{id}/complete/{amount}', 'complete');
-});
 
+//Order 
+Route::get('/orders', [OrderController::class, 'view']);
+
+// Show add Order form
+Route::get('/orders/add', [OrderController::class, 'show']);
+
+// Store Orders
+Route::post('/orders/store', [OrderController::class, 'store']);
+
+// Show Add items to order
+Route::get('/orders/{order}/additems', [OrderController::class, 'additems']);
+
+// Transfer Table view
+Route::get('/orders/{order}/transfer', [OrderController::class, 'transferView']);
+
+// Transfer Table view
+Route::get('/orders/{order}/merge', [OrderController::class, 'mergeView']);
+
+// Transfer Table Update
+Route::post('/orders/{order}/transfer/update', [OrderController::class, 'transfer']);
+
+// Transfer Table Update
+Route::post('/orders/{order}/merge/update', [OrderController::class, 'merge']);
 
 // Order List Resource
 Route::resource('/orders/{id}/additems', OrderItemsController::class);
+
+// Order Paid
+Route::get('/orders/{id}/paid', [OrderController::class, 'paid']);
+
+// Order Delete
+Route::delete('/orders/{id}/delete', [OrderController::class, 'destroy']);
+
+// Order Completed
+Route::get('/orders/{id}/complete/{amount}', [OrderController::class, 'complete']);
 
 // update order list item
 Route::put('/orderitems/{id}/update', [OrderItemsController::class, 'update_item']);
@@ -107,11 +177,63 @@ Route::get('/orderitems/{id}/update/prepared', [OrderItemsController::class, 'up
 Route::delete('/orderitems/{order}/{item}/delete', [OrderItemsController::class, 'delete_item']);
 
 
-//Order Bill
-Route::controller(InvoiceController::class)->group(function(){
-    Route::get('/invoices','index');
-    Route::get('/invoices/{order}','show');
-});
+// View Invoice index
+Route::get('/invoices', [InvoiceController::class, 'index']);
+
+// Show single Invoice
+Route::get('/invoices/{order}', [InvoiceController::class, 'show']);
+
+// Update customer in Invoice
+Route::post('/invoices/{order}/customer/update', [InvoiceController::class, 'customerUpdate']);
+
+// Update discount in Invoice
+Route::post('/invoices/{order}/discount/update', [InvoiceController::class, 'discountUpdate']);
+
+//Tables 
+Route::get('/tables', [TableController::class, 'view']);
+
+// Show add table form
+Route::get('/tables/add', [TableController::class, 'show']);
+
+// Add table to database
+Route::post('/tables/store', [TableController::class, 'store']);
+
+//Reserve table 
+Route::get('/tables/{table}', [TableController::class, 'reserve']);
+
+//Reserve table 
+Route::post('/tables/{table}/reserve', [TableController::class, 'reserve_update']);
 
 // transactions
 Route::get('/reports', [ReportController::class, 'index']);
+
+// Search Items
+Route::get('/search/item', [InventoryController::class, 'search']);
+
+// Search Items
+Route::get('/search/items', [InventoryController::class, 'searchItems']);
+
+// Search Orders
+Route::get('/search/orders', [AjaxController::class, 'searchOrder']);
+
+// Search Invoices
+Route::get('/search/invoices', [AjaxController::class, 'searchInvoice']);
+
+// Search Params
+Route::get('/search/top/{param}', [AjaxController::class, 'search']);
+
+
+// Kitch Ajaxs
+Route::get('/ajax/kitchen_new', [AjaxController::class, 'new']);
+
+
+// Events
+Route::get('/event', function() {
+    event(new MessageNotification('This is our first Notification'));
+});
+
+Route::get('/listen', function() {
+    return view('listen');
+});
+
+Route::post('/additems/store', [InventoryController::class, 'store'])->name('additems.store');
