@@ -63,10 +63,12 @@
                 {{ $dones->appends(['pendings' => $cookings->currentPage()])->appends(['cookings' => $dones->currentPage()])->links() }}
             </div>
         </div>
+        
     </div>
 </x-layout>
 <script>
      $(document).ready(function(){
         setInterval(fetchdata, 10000);
+        
      })
 </script>

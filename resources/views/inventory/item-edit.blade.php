@@ -63,19 +63,7 @@
                 @enderror
             </div>
 
-            <div class="mb-6">
-                <label for="image">
-                    Item image
-                </label>
-                <input type="file" class="border border-gray-200 rounded p-2 text-white w-full" name="image"/>
-                @error('image')
-                    <p class="text-white text-xs mt-1">{{ $message }}</p>
-                @enderror
-                @if($item->image)
-                <img src="{{ asset('storage/' . $item->image) }}" alt="item image" class="w-32 h-32 rounded-lg mt-4 object-cover" onerror="this.onerror=null;this.src='{{asset('img/logo.png')}}';">
-                @else
-                @endif
-            </div>
+            
 
             <div class="mb-6">
                 <button type="submit" class="text-white  border border-sky-200 rounded py-2 px-4 hover:bg-black">

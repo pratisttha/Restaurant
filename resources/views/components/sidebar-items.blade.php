@@ -37,11 +37,7 @@
             'path' => 'kitchen',
             'icon_class' => 'fa-duotone fa-burger-soda',
         ],
-        [
-            'name' => 'Reports',
-            'path' => 'reports',
-            'icon_class' => 'fa-duotone fa-clipboard',
-        ],
+        
     ];
     
 @endphp

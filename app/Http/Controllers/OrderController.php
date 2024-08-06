@@ -71,10 +71,16 @@ class OrderController extends Controller
     }
 
     // Update order payment to paid
-    public function paid(Order $id) {
-        $id->update(['payment' => 'Paid']);
-        return redirect('/orders/'.$id->id .'/additems')->with('success', 'Order status updated to PAID!');
+    public function paid(Request $request, $id) {
+        $order = Order::find($id);
+        if ($order) {
+            $order->update(['payment' => 'Paid']);
+            return response()->json(['success' => true, 'message' => 'Order status updated to PAID!']);
+        }
+        return response()->json(['success' => false, 'message' => 'Order not found.'], 404);
     }
+    
+   
 
     // Update order status to complete
     public function complete(Order $id, $amount) {

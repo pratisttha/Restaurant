@@ -15,6 +15,9 @@
                         <span class="px-2 py-1 border border-current text-gray-400 rounded-lg text-sm">
                             <i class="fa-duotone fa-hourglass-half"></i> Unpaid
                         </span>
+                        <button id="payButton" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                            Mark as Paid
+                        </button>
                     @endif
                 </div>
                 <p class="text-lg py-2 flex flex-wrap gap-2 items-center">
@@ -326,5 +329,42 @@
         </div>
     </div>
     {{-- Ajax Starting --}}
-    <script class="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Ensure the CSRF token is available in the request headers
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#payButton').click(function() {
+        // Get the order ID dynamically if needed
+        var orderId = '{{ $order->id }}'; // Adjust if you need to pass the ID dynamically
+
+        $.ajax({
+            url: '/orders/' + orderId + '/pay', // URL for the PATCH request
+            method: 'PATCH',
+            dataType: 'json', // Expect JSON response
+            success: function(response) {
+                // Handle success
+                if (response.success) {
+                    alert(response.message); // Display success message
+                    // Optionally update the UI, e.g., change button text or style
+                    $('#payButton').text('Paid').attr('disabled', true);
+                }
+            },
+            error: function(xhr) {
+                // Handle errors
+                console.log('Error:', xhr.responseText);
+                alert('An error occurred while updating the order status.');
+            }
+        });
+    });
+});
+</script>
+
+
+ 
 </x-layout>

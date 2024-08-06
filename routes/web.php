@@ -151,6 +151,9 @@ Route::resource('/orders/{id}/additems', OrderItemsController::class);
 
 // Order Paid
 Route::get('/orders/{id}/paid', [OrderController::class, 'paid']);
+// web.php
+Route::patch('/orders/{order}/pay', [OrderController::class, 'paid']);
+
 
 // Order Delete
 Route::delete('/orders/{id}/delete', [OrderController::class, 'destroy']);
@@ -235,5 +238,9 @@ Route::get('/event', function() {
 Route::get('/listen', function() {
     return view('listen');
 });
+
+// routes/web.php
+Route::patch('/orders/{order}/pay', [OrderController::class, 'markAsPaid']);
+
 
 Route::post('/additems/store', [InventoryController::class, 'store'])->name('additems.store');

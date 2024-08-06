@@ -1,23 +1,29 @@
 <?php
-
+// app/Http/Controllers/ReportController.php
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
-    // Show index
     public function index()
     {
-        if (Auth::guest()) {
-            return redirect('login');
-        }
-        $date = Carbon::now();
-        $day = date('Y-m-d', strtotime($date));
-        $orders = Order::where('created_at', 'LIKE', '%' . $day . '%')->get();
-        return view('reports.index', compact('orders'));
+        // Fetch today's orders
+        $today = Carbon::today();
+        $orders = Order::with('orderItems')->whereDate('created_at', $today)->get();
+
+        // Calculate total sales from order items
+        $totalSales = $orders->flatMap->orderItems->sum(function ($orderItem) {
+            return $orderItem->quantity * $orderItem->price;
+        });
+
+        return view('report.index', [
+            'orders' => $orders,
+            'totalSales' => $totalSales
+        ]);
     }
 }
+
