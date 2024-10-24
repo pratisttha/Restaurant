@@ -1,2 +1,2 @@
-# reataurant
- Reaaurant managament system 
+# restaurant 
+ Restaurant Managemet System 
